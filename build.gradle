@@ -1,0 +1,63 @@
+// Note: "common.gradle" in the root project contains additional initialization
+//   for this project. This initialization is applied in the "build.gradle"
+//   of the root project.
+
+// NetBeans will automatically add "run" and "debug" tasks relying on the
+// "mainClass" property. You may however define the property prior executing
+// tasks by passing a "-PmainClass=<QUALIFIED_CLASS_NAME>" argument.
+//
+// Note however, that you may define your own "run" and "debug" task if you
+// prefer. In this case NetBeans will not add these tasks but you may rely on
+// your own implementation.
+
+
+if (!hasProperty('mainClass')) {
+    ext.mainClass = 'com.app.CrudApplication'
+}
+
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "org.springframework.boot:spring-boot-gradle-plugin:2.1.5.RELEASE"
+  }
+}
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
+
+
+jar {
+    baseName = 'service-point'
+    version =  '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // tag::jetty[]
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-jetty")
+    
+    // end::jetty[]
+    // tag::actuator[]
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    // end::actuator[]
+    
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("org.hibernate:hibernate-core")
+    compile("org.springframework.boot:spring-boot-test")
+    compile("org.springframework.boot:spring-boot-starter-test")
+    compile("mysql:mysql-connector-java")
+    testCompile("junit:junit:4.12")
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '5.2.1'
+}
